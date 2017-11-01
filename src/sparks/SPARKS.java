@@ -31,7 +31,8 @@ public class SPARKS {
         chooser.showOpenDialog(null);
 
         String path = chooser.getSelectedFile().getParent();
-        System.out.println(path);
+        System.out.println("Caminho: " + path);
+
         return path;
     }
 

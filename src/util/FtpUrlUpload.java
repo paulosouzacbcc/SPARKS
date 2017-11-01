@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import org.apache.commons.net.ftp.FTPClient;
-import sparks.FTPCreateDirDemo;
 
 public class FtpUrlUpload {
 
@@ -16,20 +15,14 @@ public class FtpUrlUpload {
     static String user = "paulo";
     static String pass = "1234";
 
-    public static String upload(String filePath, String fileName) {
+    public static String upload(String filePath, String fileName, String dir) {
 
         String ftpUrl = "ftp://%s:%s@%s/%s;type=i";
 
-        System.out.println(filePath);
-        String dir = filePath.substring(filePath.lastIndexOf("/"), filePath.length() - 1);
-        System.out.println(dir);
-        //String filePath = "C:/Users/gtiago/Downloads/estagio/teste.xlsx";
         String uploadPathInFtp = "/Teste/".concat(fileName);
 
         ftpUrl = String.format(ftpUrl, user, pass, host, uploadPathInFtp);
         System.out.println("Upload URL: " + ftpUrl);
-
-        FTPCreateDirDemo.main(null, "joao");
 
         try {
             URL url = new URL(ftpUrl);
