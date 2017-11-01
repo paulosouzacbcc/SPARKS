@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="SPARKSPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>model.AutorizacaoUsoImagemAudio</class>
+    <class>model.DataProducaoHora</class>
+    <class>model.LocalProducaoLocalizacao</class>
+    <class>model.QualidadeDosDados</class>
+    <class>model.EmpresaProdutora</class>
+    <class>model.ExtensaoArquivo</class>
+    <class>model.LocalProducaoCidade</class>
+    <class>model.CategoriaDeReferencia</class>
+    <class>model.Arquivo</class>
+    <class>model.OrigemDosDados</class>
+    <class>model.CategoriaDoObjeto</class>
+    <class>model.Aquisicao</class>
+    <class>model.ResponsavelEdicao</class>
+    <class>Controller.DataProducaoHora</class>
+    <class>Controller.QualidadeDosDados</class>
+    <class>Controller.CategoriaDoObjeto</class>
+    <class>Controller.CategoriaDeReferencia</class>
+    <class>Controller.OrigemDosDados</class>
+    <class>Controller.ResponsavelEdicao</class>
+    <class>Controller.AutorizacaoUsoImagemAudio</class>
+    <class>Controller.ExtensaoArquivo</class>
+    <class>Controller.Arquivo</class>
+    <class>Controller.Aquisicao</class>
+    <class>Controller.EmpresaProdutora</class>
+    <class>Controller.LocalProducaoLocalizacao</class>
+    <class>Controller.LocalProducaoCidade</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/bd_casa_de_memoria?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+    </properties>
+  </persistence-unit>
+</persistence>
