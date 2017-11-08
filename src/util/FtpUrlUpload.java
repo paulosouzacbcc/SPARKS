@@ -19,7 +19,7 @@ public class FtpUrlUpload {
 
         String ftpUrl = "ftp://%s:%s@%s/%s;type=i";
 
-        String uploadPathInFtp = "/Teste/".concat(fileName);
+        String uploadPathInFtp = dir + "/".concat(fileName);
 
         ftpUrl = String.format(ftpUrl, user, pass, host, uploadPathInFtp);
         System.out.println("Upload URL: " + ftpUrl);

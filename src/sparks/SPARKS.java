@@ -33,6 +33,10 @@ public class SPARKS {
         String path = chooser.getSelectedFile().getParent();
         System.out.println("Caminho: " + path);
 
+        String dir = path.substring(path.lastIndexOf("\\"), path.length());
+        System.out.println(dir);
+        System.out.println(dir.substring(1));
+        FTPCreateDirDemo.main(null, dir.substring(1));
         return path;
     }
 

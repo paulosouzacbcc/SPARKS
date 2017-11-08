@@ -30,7 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class AbreExcel {
-
+    
     private static final String fileCelebracao = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Celebração.xlsx";
     private static final String fileName2 = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Formas de Expressão.xlsx";
     private static final String fileName3 = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Historias de Vida.xlsx";
@@ -41,39 +41,39 @@ public class AbreExcel {
     static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     static List<File> listFiles = new ArrayList<>();
     static List<String> listPathFiles = new ArrayList<>();
-
+    
     static String pathDiretorio;
-
+    
     public void lerExcel() throws IOException {
         List<Arquivo> listaArquivos = new ArrayList<>();
-
+        
         pathDiretorio = sparks.SPARKS.getDiretorio();
-
+        
         listFilesFilter();
-
+        
         try {
             FileInputStream fileInputStream = new FileInputStream(new File(AbreExcel.fileCelebracao));
-
+            
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
-
+            
             XSSFSheet sheetAlunos = workbook.getSheetAt(0);
-
+            
             Iterator<Row> rowIterator = sheetAlunos.iterator();
-
+            
             while (rowIterator.hasNext()) {
-
+                
                 Row row = rowIterator.next();
-
+                
                 Iterator<Cell> cellIterator = row.cellIterator();
-
+                
                 Arquivo arquivo = new Arquivo();
                 listaArquivos.add(arquivo);
-
+                
                 while (cellIterator.hasNext() && row.getRowNum() > 0) {
                     Cell cell = cellIterator.next();
-
+                    
                     switch (cell.getColumnIndex()) {
-
+                        
                         case 0:
                             arquivo.setIndicacaoDataHora(cell.getDateCellValue());
                             break;
@@ -123,7 +123,7 @@ public class AbreExcel {
                             arquivo.setLocalProducaoLocalizacao(cell.getStringCellValue());
                             break;
                         case 15:
-
+                            
                             arquivo.setDataProducaoData(cell.getDateCellValue());
                             break;
                         case 17:
@@ -166,36 +166,36 @@ public class AbreExcel {
                             arquivo.setOrigemDosDados(cell.getStringCellValue());
                             break;
                     }
-
+                    
                 }
-
+                
             }
             fileInputStream.close();
-
+            
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("Arquivo Excel não encontrado!");
         }
-
+        
         if (listaArquivos.size() == 0) {
             System.out.println("Nenhum aluno encontrado!");
         } else {
-
+            
             for (int i = 0; i < listFiles.size(); i++) {
                 for (int j = 0; j < listaArquivos.size(); j++) {
-
+                    
                     if (listFiles.get(i).getName().substring(0, listFiles.get(i).getName().lastIndexOf(".")).equalsIgnoreCase(listaArquivos.get(j).getNumeroCatalogacao())) {
-                        listaArquivos.get(j).setUrl(FtpUrlUpload.upload(listFiles.get(i).getAbsolutePath(), listFiles.get(i).getName(), pathDiretorio));
+                        listaArquivos.get(j).setUrl(FtpUrlUpload.upload(listFiles.get(i).getAbsolutePath(), listFiles.get(i).getName(), pathDiretorio.substring(pathDiretorio.lastIndexOf("\\"), pathDiretorio.length()).substring(1)));
                         facade.FacadeJpa.getInstance().getArquivo().create(listaArquivos.get(j));
-
+                        
                     }
                 }
             }
         }
     }
-
+    
     static void listFilesFilter() {
-
+        
         File folder = new File(pathDiretorio);
 
         //Implementing FilenameFilter to retrieve only txt files
@@ -218,10 +218,10 @@ public class AbreExcel {
 
         //Passing txtFileFilter to listFiles() method to retrieve only txt files
         File[] files = folder.listFiles(txtFileFilter);
-
+        
         for (File file : files) {
             listFiles.add(file);
-
+            
         }
     }
 }
