@@ -368,4 +368,8 @@ public class Arquivo implements Serializable {
         return "model.Arquivo[ idArquivo=" + idArquivo + " ]";
     }
 
+    public void setDataProducaoData(String empno) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

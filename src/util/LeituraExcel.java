@@ -5,54 +5,55 @@
  */
 package util;
 
-/**
- *
- * @author gtiago
- *
- *
- *
- */
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Arquivo;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import static util.AbreExcel.pathDiretorio;
 
-public class AbreExcel {
+/**
+ *
+ * @author gtiago
+ */
+public class LeituraExcel {
 
     private static final String fileCelebracao = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Celebração.xlsx";
     private static final String fileFormasExpresao = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Formas de Expressão.xlsx";
     private static final String fileHistoriaVida = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Historias de Vida.xlsx";
     private static final String fileLugares = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Lugares.xlsx";
     private static final String fileOficios = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Oficios e Modos de Fazer.xlsx";
-    //private static final String fileName = "C:/Users/gtiago/Downloads/estagio/teste.xlsx";
 
-    static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    static List<File> listFiles = new ArrayList<>();
-    static List<String> listPathFiles = new ArrayList<>();
+    public static void main(String[] args) throws IOException {
 
-    static String pathDiretorio;
-
-    public void lerExcel() throws IOException {
-        List<Arquivo> listaArquivos = new ArrayList<>();
-
-        pathDiretorio = sparks.SPARKS.getDiretorio();
-
-        listFilesFilter();
+        LeituraExcel leituraExcel = new LeituraExcel();
 
         try {
-            FileInputStream fileInputStream = new FileInputStream(new File(AbreExcel.fileFormasExpresao));
+            leituraExcel.lerExcel();
+        } catch (IOException ex) {
+            Logger.getLogger(LeituraExcel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void lerExcel() throws IOException {
+
+        List<Arquivo> listaArquivos = new ArrayList<>();
+
+        int j = 0;
+        try {
+            FileInputStream fileInputStream = new FileInputStream(new File(LeituraExcel.fileLugares));
 
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
 
@@ -77,6 +78,8 @@ public class AbreExcel {
                         case 1:
                             cell.setCellType(CellType.STRING);
                             arquivo.setNumeroRegistro(cell.getStringCellValue());
+                            j += 1;
+                            System.out.println(j);
                             break;
                         case 2:
                             cell.setCellType(CellType.STRING);
@@ -152,6 +155,7 @@ public class AbreExcel {
                             arquivo.setResponsavelDocumentacaoNome(cell.getStringCellValue());
                             break;
                         case 24:
+
                             arquivo.setResponsavelDocumentacaoData(cell.getDateCellValue());
                             break;
                         case 29:
@@ -168,7 +172,6 @@ public class AbreExcel {
                 }
                 // imprimir listarquivo
 
-                showObject(listaArquivos);
             }
 
             fileInputStream.close();
@@ -178,85 +181,5 @@ public class AbreExcel {
             System.out.println("Arquivo Excel não encontrado!");
         }
 
-        if (listaArquivos.size() == 0) {
-            System.out.println("Nenhum aluno encontrado!");
-        } else {
-
-            for (int i = 0; i < listFiles.size(); i++) {
-                for (int j = 0; j < listaArquivos.size(); j++) {
-
-                    if (listFiles.get(i).getName().substring(0, listFiles.get(i).getName().lastIndexOf(".")).equalsIgnoreCase(listaArquivos.get(j).getNumeroCatalogacao())) {
-                        listaArquivos.get(j).setUrl(FtpUrlUpload.upload(listFiles.get(i).getAbsolutePath(), listFiles.get(i).getName(), pathDiretorio.substring(pathDiretorio.lastIndexOf("\\"), pathDiretorio.length()).substring(1)));
-                        facade.FacadeJpa.getInstance().getArquivo().create(listaArquivos.get(j));
-
-                    }
-                }
-            }
-            System.out.println("Dados inseridos e transferidos.");
-        }
-    }
-
-    static void listFilesFilter() {
-
-        File folder = new File(pathDiretorio);
-
-        //Implementing FilenameFilter to retrieve only txt files
-        FilenameFilter txtFileFilter = new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                if (name.endsWith(".JPG")) {
-                    return true;
-                } else if (name.endsWith(".MOV")) {
-                    return true;
-                } else if (name.endsWith(".MP4")) {
-                    return true;
-                } else if (name.endsWith(".AVI")) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        };
-
-        //Passing txtFileFilter to listFiles() method to retrieve only txt files
-        File[] files = folder.listFiles(txtFileFilter);
-
-        for (File file : files) {
-            listFiles.add(file);
-
-        }
-    }
-
-    public void showObject(List<Arquivo> arrayList) {
-
-        for (int i = 0; i < arrayList.size(); i++) {
-
-            System.out.println(arrayList.get(i).getAquisicao());
-            System.out.println(arrayList.get(i).getAutorizacao());
-            System.out.println(arrayList.get(i).getCategoriaObjeto());
-            System.out.println(arrayList.get(i).getCategoriaReferencia());
-            System.out.println(arrayList.get(i).getData());
-            System.out.println(arrayList.get(i).getDataProducaoData());
-            System.out.println(arrayList.get(i).getDescricaoInformacao());
-            System.out.println(arrayList.get(i).getEmpresaProdutora());
-            System.out.println(arrayList.get(i).getEquipeRealizadora());
-            System.out.println(arrayList.get(i).getExtensaoArquivo());
-            System.out.println(arrayList.get(i).getIndicacaoDataHora());
-            System.out.println(arrayList.get(i).getLocalProducaoCidade());
-            System.out.println(arrayList.get(i).getLocalProducaoLocalizacao());
-            System.out.println(arrayList.get(i).getNumeroCatalogacao());
-            System.out.println(arrayList.get(i).getNumeroRegistro());
-            System.out.println(arrayList.get(i).getObservacoes());
-            System.out.println(arrayList.get(i).getOrigemDosDados());
-            System.out.println(arrayList.get(i).getPalavraChave());
-            System.out.println(arrayList.get(i).getQualidadeDados());
-            System.out.println(arrayList.get(i).getResponsavelDocumentacaoData());
-            System.out.println(arrayList.get(i).getResponsavelDocumentacaoNome());
-            System.out.println(arrayList.get(i).getResponsavelDocumentacaoUnidade());
-            System.out.println(arrayList.get(i).getResponsavelEdicao());
-            System.out.println(arrayList.get(i).getTempoDuracao());
-            System.out.println(arrayList.get(i).getTitulo());
-            System.out.println(arrayList.get(i).getUrl());
-        }
     }
 }
