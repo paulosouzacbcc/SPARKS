@@ -29,52 +29,52 @@ import static util.AbreExcel.pathDiretorio;
  * @author gtiago
  */
 public class LeituraExcel {
-
+    
     private static final String fileCelebracao = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Celebração.xlsx";
     private static final String fileFormasExpresao = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Formas de Expressão.xlsx";
     private static final String fileHistoriaVida = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Historias de Vida.xlsx";
     private static final String fileLugares = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Lugares.xlsx";
     private static final String fileOficios = "C:/Users/gtiago/Downloads/estagio/planilhasdadocumentao/Planilha Documentação_Oficios e Modos de Fazer.xlsx";
-
+    
     public static void main(String[] args) throws IOException {
-
+        
         LeituraExcel leituraExcel = new LeituraExcel();
-
+        
         try {
             leituraExcel.lerExcel();
         } catch (IOException ex) {
             Logger.getLogger(LeituraExcel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public void lerExcel() throws IOException {
-
+        
         List<Arquivo> listaArquivos = new ArrayList<>();
-
+        
         int j = 0;
         try {
             FileInputStream fileInputStream = new FileInputStream(new File(LeituraExcel.fileLugares));
-
+            
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
-
+            
             XSSFSheet sheetAlunos = workbook.getSheetAt(0);
-
+            
             Iterator<Row> rowIterator = sheetAlunos.iterator();
-
+            
             while (rowIterator.hasNext()) {
-
+                
                 Row row = rowIterator.next();
-
+                
                 Iterator<Cell> cellIterator = row.cellIterator();
-
+                
                 Arquivo arquivo = new Arquivo();
                 listaArquivos.add(arquivo);
-
+                
                 while (cellIterator.hasNext() && row.getRowNum() > 0) {
                     Cell cell = cellIterator.next();
-
+                    
                     switch (cell.getColumnIndex()) {
-
+                        
                         case 1:
                             cell.setCellType(CellType.STRING);
                             arquivo.setNumeroRegistro(cell.getStringCellValue());
@@ -123,8 +123,10 @@ public class LeituraExcel {
                             arquivo.setLocalProducaoLocalizacao(cell.getStringCellValue());
                             break;
                         case 15:
-
+                            
+                            System.out.println(cell.getDateCellValue());
                             arquivo.setDataProducaoData(cell.getDateCellValue());
+                            
                             break;
                         case 17:
                             cell.setCellType(CellType.STRING);
@@ -155,7 +157,7 @@ public class LeituraExcel {
                             arquivo.setResponsavelDocumentacaoNome(cell.getStringCellValue());
                             break;
                         case 24:
-
+                            
                             arquivo.setResponsavelDocumentacaoData(cell.getDateCellValue());
                             break;
                         case 29:
@@ -173,13 +175,13 @@ public class LeituraExcel {
                 // imprimir listarquivo
 
             }
-
+            
             fileInputStream.close();
-
+            
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("Arquivo Excel não encontrado!");
         }
-
+        
     }
 }
